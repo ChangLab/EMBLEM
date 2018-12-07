@@ -21,7 +21,7 @@ while(<IN>)
 	my @a=split;
 	$SNV_hash{$a[1]}{"base"}=$a[2]."/".$a[3];
 	my $flag=0;
-        if($a[4]>$a[5]){$flag=1}
+        if($a[4]<$a[5]){$flag=1}
         $SNV_hash{$a[1]}{"flag"}=$flag;
 	
 	
