@@ -6,13 +6,13 @@ use warnings;
 
 if(@ARGV<1)
 {
-	print "perl $0  <output path from ATAC_mito_sc> <ProjectInfor> \n";
+	print "perl $0  <SNV file> <summary> <sc_output_path>\n";
 	exit;
 }
 
-my $SNV=$ARGV[0]."/pool_output/".$ARGV[1].".merge.mt.mpileup.q20Q30.snv.filter.addfreq.sort";
-my $summary=$ARGV[0]."/summary.tsv";
-my $sc_output=$ARGV[0]."sc_output/";
+my $SNV=$ARGV[0];
+my $summary=$ARGV[1];
+my $sc_output=$ARGV[2];
 my %SNV_hash;
 
 open IN, "$SNV" or die "can not open $SNV\n";
@@ -21,9 +21,8 @@ while(<IN>)
 	my @a=split;
 	$SNV_hash{$a[1]}{"base"}=$a[2]."/".$a[3];
 	my $flag=0;
-        if($a[4]>$a[5]){$flag=1}
-        $SNV_hash{$a[1]}{"flag"}=$flag;
-	
+	if($a[4]>$a[5]){$flag=1}
+	$SNV_hash{$a[1]}{"flag"}=$flag; 
 	
 }
 close IN;
@@ -46,20 +45,17 @@ while(<SUM>)
 		{
 		#	print "position\t",$b[1],"\t";
 			my $base=$SNV_hash{$b[1]}{"base"};
-                        my $flag=$SNV_hash{$b[1]}{"flag"};
-
+			my $flag=$SNV_hash{$b[1]}{"flag"};
 		#	print $base,"\t";
 		#	print $b[2]."/".$b[5],"\n";
 			if ($base eq $b[2]."/".$b[5])			
-			{
-				  if($flag == 1)
-                                        {
-                                        $matrix{$a[0]}{$b[1]}=$b[7];
-                                        }
-                                        else{
-                                        $matrix{$a[0]}{$b[1]}=$b[8];
-                                        }
-	
+			{		if($flag == 1)
+					{
+					$matrix{$a[0]}{$b[1]}=$b[7];
+					}
+					else{
+					$matrix{$a[0]}{$b[1]}=$b[8];
+					}	
 			}
 			else
 			{
